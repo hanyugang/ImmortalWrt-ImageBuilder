@@ -20,6 +20,8 @@ uci set system.@system[0].hostname='wrt'
 uci add dhcp domain
 uci set "dhcp.@domain[-1].name=time.android.com"
 uci set "dhcp.@domain[-1].ip=203.107.6.88"
+uci -q set dhcp.lan.start='10'
+uci -q set dhcp.lan.limit='90'
 
 # 检查配置文件pppoe-settings是否存在 该文件由build.sh动态生成
 SETTINGS_FILE="/etc/config/pppoe-settings"
@@ -87,7 +89,7 @@ elif [ "$count" -gt 1 ]; then
     uci set network.wan6.proto='dhcpv6'
 
     # 查找 br-lan 设备 section
-    section=$(uci show network | awk -F '[.=]' '/\.@?device\[\d+\]\.name=.br-lan.$/ {print $2; exit}')
+    section=$(uci show network | awk -F '[.=]' '/\.@?device\[[0-9]+\]\.name=.br-lan.$/ {print $2; exit}')
     if [ -z "$section" ]; then
         log_msg "error：cannot find device 'br-lan'."
     else
@@ -135,7 +137,7 @@ elif [ "$count" -gt 1 ]; then
 fi
 
 # 设置所有网口可访问网页终端
-uci delete ttyd.@ttyd[0].interface
+#uci delete ttyd.@ttyd[0].interface
 
 # 设置所有网口可连接 SSH
 uci -q delete dropbear.@dropbear[0].Interface
