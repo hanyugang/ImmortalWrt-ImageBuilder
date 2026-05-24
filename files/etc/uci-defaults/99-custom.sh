@@ -6,7 +6,7 @@ log_msg() {
     echo "$(date '+%Y-%m-%d %H:%M:%S') asu-init: $*" >> /tmp/custom-init.log
 }
 
-log_msg "Starting 99-custom.sh at $(date)"
+log_msg "Starting 99-custom.sh"
 
 # 设置默认防火墙规则，方便单网口虚拟机首次访问 WebUI 
 # 因为本项目中 单网口模式是dhcp模式 直接就能上网并且访问web界面 避免新手每次都要修改/etc/config/network中的静态ip
@@ -360,5 +360,7 @@ EOF
 
 chmod +x /etc/hotplug.d/iface/95-remote-config
 log_msg "Hotplug script created: /etc/hotplug.d/iface/95-remote-config"
+
+log_msg "Log saved to /tmp/custom-init.log"
 
 exit 0
